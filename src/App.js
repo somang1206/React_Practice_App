@@ -4,25 +4,25 @@ import Form from "./components/Form";
 import List from "./components/List";
 
 export default function App() {
-/* 
-  state = {
+ 
+ console.log('App Component')
     
-  todoData : [ */
-/*     {
-      id : "1",
-      title : "공부하기",
-      completed : false,
-    },
-    {
-      id : "2",
-      title : "청소하기",
-      completed : false
-    } */
-/*   ],
-  value:""
-  }
- */
-  const [todoData, setTodoData] =useState([]);
+
+
+  const [todoData, setTodoData] =useState([
+    
+      {
+       id : "1",
+       title : "공부하기",
+       completed : false,
+     },
+     {
+       id : "2",
+       title : "청소하기",
+       completed : false
+     }, 
+    ]);
+
   const [value, setValue] = useState("");
 
 
@@ -92,7 +92,7 @@ export default function App() {
       <div className="title">
         <h1>할 일 목록</h1>
       </div>
-
+      
       <List todoData={todoData} setTodoData={setTodoData}/>
 
       <Form handleSubmit={handleSubmit} value={value} setValue={setValue}/>
@@ -127,3 +127,4 @@ export default function App() {
     );
 
 }
+
