@@ -1,7 +1,10 @@
-import React, {useState} from "react";
+import React, {useState, useCallback} from "react";
 import "./App.css";
 import Form from "./components/Form";
 import List from "./components/List";
+
+
+const initialTodoData = localStorage.getItem("todoData") ? JSON.parse(localStorage.getItem("todoData")) : [];
 
 export default function App() {
  
@@ -9,9 +12,9 @@ export default function App() {
     
 
 
-  const [todoData, setTodoData] =useState([
+  const [todoData, setTodoData] =useState(initialTodoData
     
-      {
+/*       {
        id : "1",
        title : "공부하기",
        completed : false,
@@ -20,8 +23,8 @@ export default function App() {
        id : "2",
        title : "청소하기",
        completed : false
-     }, 
-    ]);
+     },  */
+    );
 
   const [value, setValue] = useState("");
 
@@ -57,6 +60,11 @@ export default function App() {
     setValue(e.target.value);
   }; */
 
+  const deleteStyle = {
+    float : "right",
+    margin : "10px"
+  }
+
   const handleSubmit = (e) =>{
     //form 안에 input을 전송할 때 페이지 리로드 되는 걸 막아줌
     e.preventDefault();
@@ -70,10 +78,22 @@ export default function App() {
 
     //원래 있던 할 일에 새ㅐ로운 할 일 더해주기
     setTodoData(prev => [...prev, newTodo]);
+    localStorage.setItem('todoData', JSON.stringify([...todoData, newTodo]));
     setValue("");
   };
 
+  const handleClick = useCallback((id) =>{
+    let newTodoData = todoData.filter(data => data.id !== id);
+    console.log('newTodoData', newTodoData);
+    setTodoData(newTodoData);
+    localStorage.setItem('todoData', JSON.stringify(newTodoData));
+  },[todoData]);
 
+
+  const handleRemoveClick = () =>{
+    setTodoData([]);
+    localStorage.setItem('todoData', JSON.stringify([]));
+  }
 /* 
   const handleCompleteChange = (id) =>{
     let newTodoData = todoData.map(data =>{
@@ -91,9 +111,10 @@ export default function App() {
         <div className="todoBlock">
       <div className="title">
         <h1>할 일 목록</h1>
+        <button onClick={handleRemoveClick} style={deleteStyle}>Delete All</button>
       </div>
       
-      <List todoData={todoData} setTodoData={setTodoData}/>
+      <List handleClick={handleClick} todoData={todoData} setTodoData={setTodoData}/>
 
       <Form handleSubmit={handleSubmit} value={value} setValue={setValue}/>
 {/*       {todoData.map(data => (
